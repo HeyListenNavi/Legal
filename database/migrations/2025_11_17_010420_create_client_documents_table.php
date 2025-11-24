@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign("client_id")->references("id")->on("client")->cascadeOnDelete();
+            $table->foreign("client_id")->references("id")->on("clients")->cascadeOnDelete();
         });
     }
 

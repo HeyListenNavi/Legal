@@ -6,10 +6,17 @@ use App\Filament\Resources\Clients\Pages\CreateClients;
 use App\Filament\Resources\Clients\Pages\EditClients;
 use App\Filament\Resources\Clients\Pages\ListClients;
 use App\Filament\Resources\Clients\Pages\ViewClients;
+use App\Filament\Resources\Clients\RelationManagers\AppointmentsRelationManager;
+use App\Filament\Resources\Clients\RelationManagers\CasesRelationManager;
+use App\Filament\Resources\Clients\RelationManagers\DocumentsRelationManager;
+use App\Filament\Resources\Clients\RelationManagers\PaymentsRelationManager;
+use App\Filament\Resources\Clients\RelationManagers\RecurrentPaymentsRelationManager;
 use App\Filament\Resources\Clients\Schemas\ClientsForm;
 use App\Filament\Resources\Clients\Schemas\ClientsInfolist;
 use App\Filament\Resources\Clients\Tables\ClientsTable;
+use App\Models\Appointments;
 use App\Models\Client;
+use App\Models\RecurrentPayment;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -40,7 +47,11 @@ class ClientsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CasesRelationManager::class,
+            DocumentsRelationManager::class,
+            AppointmentsRelationManager::class,
+            PaymentsRelationManager::class,
+            RecurrentPaymentsRelationManager::class,
         ];
     }
 

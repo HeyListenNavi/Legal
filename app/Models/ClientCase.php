@@ -13,14 +13,14 @@ class ClientCase extends Model
     protected $fillable = [
         "client_id",
         "case_name",
-        "resposable_lawyer",
+        "responsable_lawyer",
         "case_type",
-        "juzgado", //Traducir
+        "courtroom",
         "external_expedient_number",
         "resume",
         "start_date",
         "stimated_finish_date",
-        "real_finish_date",
+        "real_finished_date",
         "status",
         "total_pricing",
         "paid_porcentage" //convertir en un computed field
