@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string("total_pricing"); //Traducir a ingles ( honorarios? )
             $table->string("paid_porcentage"); //Pasar a computed field <==== IMPORTANTE
             $table->timestamps();
+
+            //Relationships
+            $table->foreign("client_id")->references("id")->on("clients")->cascadeOnDelete();
         });
     }
 

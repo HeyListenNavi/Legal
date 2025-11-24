@@ -37,4 +37,8 @@ class ClientCase extends Model
     public function payments(){
         return $this->morphMany(Payment::class, "paymentable");
     }
+
+    public function comments(){
+        return $this->morphMany(Comment::class, "commentable");
+    }
 }

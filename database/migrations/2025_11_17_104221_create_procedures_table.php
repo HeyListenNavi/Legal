@@ -25,6 +25,9 @@ return new class extends Migration
             $table->integer("order");
             $table->string("notes");
             $table->timestamps();
+
+            //Relationships
+            $table->foreign("case_id")->references("id")->on("cases")->cascadeOnDelete();
         });
     }
 

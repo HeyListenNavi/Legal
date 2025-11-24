@@ -9,4 +9,17 @@ class ProcedureDocument extends Model
 {
     /** @use HasFactory<\Database\Factories\ProcedureDocumentFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        "procedure_id",
+        "name",
+        "file_path",
+        "note",
+    ];
+
+    public function procedure(){
+        return $this->belongsTo(Procedure::class, "procedure_id");
+    }
 }
+
+

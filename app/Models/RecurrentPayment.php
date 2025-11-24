@@ -21,4 +21,12 @@ class RecurrentPayment extends Model
         "status",
         "expiration_alert",
     ];
+
+    public function client(){
+        return $this->belongsTo(Client::class, "client_id");
+    }
+
+    public function payments(){
+        return $this->morphMany(Payment::class, "paymentable");
+    }
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string("rfc")->nullable();
             $table->string("address")->nullable();
             $table->string("ine_id")->nullable();
-            $table->string("ocupation")->nullable();
+            $table->string("occupation")->nullable();
             $table->dateTime("date_of_birth");
             $table->timestamps();
         });

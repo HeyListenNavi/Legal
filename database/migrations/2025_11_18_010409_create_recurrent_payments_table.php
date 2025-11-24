@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string("status"); //Activa, en mora, finalizado, cancelado
             $table->string("expiration_alert");
             $table->timestamps();
+
+            //Relationships
+            $table->foreign("client_id")->references("id")->on("clients")->cascadeOnDelete();
         });
     }
 

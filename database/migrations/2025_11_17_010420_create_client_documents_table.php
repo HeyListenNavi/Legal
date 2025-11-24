@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string("document_path");
             $table->longText("notes");
             $table->timestamps();
+
+            //Relationships
+            $table->foreign("client_id")->references("id")->on("client")->cascadeOnDelete();
         });
     }
 

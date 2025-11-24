@@ -18,4 +18,10 @@ class Comment extends Model
         "attended_by",
         "solved_date",
     ];
+
+    public function commentable(){
+        return $this->morphTo();
+    }
+
+
 }

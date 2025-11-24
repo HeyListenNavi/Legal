@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string("file_paht");
             $table->longText("notes");
             $table->timestamps();
+
+            //Relationships
+            $table->foreign("procedure_id")->references("id")->on("procedures")->cascadeOnDelete();
         });
     }
 
