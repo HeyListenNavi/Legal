@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Client;
+use App\Models\Guess;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Appointments>
@@ -16,8 +18,13 @@ class AppointmentsFactory extends Factory
      */
     public function definition(): array
     {
+        $appointmentable = $this->fake()->randomElement([
+            Client::class,
+            Guess::class,
+        ]);
+
         return [
-            //
+            
         ];
     }
 }
