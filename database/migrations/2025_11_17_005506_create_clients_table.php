@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("full_name")->index();
             $table->string("person_type");
+            $table->string("client_type");
             $table->string("phone_number");
             $table->string("email")->nullable();
             $table->string("curp");
