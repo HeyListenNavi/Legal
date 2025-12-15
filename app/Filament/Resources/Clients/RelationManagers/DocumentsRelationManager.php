@@ -30,7 +30,8 @@ class DocumentsRelationManager extends RelationManager
             ->columns(2) // 2 columnas para mejor diseño
             ->components([
                 TextInput::make('document_name')
-                    ->label('Nombre del Documento')
+                    ->label('Tipo de documento')
+                    ->columnSpanFull()
                     ->required()
                     ->placeholder('Ej. Acta Constitutiva'),
 
@@ -61,18 +62,12 @@ class DocumentsRelationManager extends RelationManager
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('document_type')
-                    ->label('Tipo')
-                    ->sortable()
-                    ->searchable(),
-
                 TextColumn::make('document_path')
                     ->label('Archivo')
                     ->formatStateUsing(fn ($state) => basename($state))
                     ->url(fn ($record) => asset('storage/' . $record->document_path))
                     ->openUrlInNewTab(),
 
-                
             ])
             ->filters([
                 //
