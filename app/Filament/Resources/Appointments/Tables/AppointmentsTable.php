@@ -11,6 +11,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Enums\AppointmentStatus;
 
 class AppointmentsTable
 {
@@ -55,13 +56,23 @@ class AppointmentsTable
                 TextColumn::make("status")
                     ->label("Estatus")
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Pendiente' => 'warning',
-                        'Confirmado' => 'success',
-                        'Cancelado' => 'danger',
-                        'Asistio' => 'success',
-                        'Reagendo' => 'info',
+                    ->color(fn (string $state) => match ($state) {
+                        AppointmentStatus::Pending->value => 'warning',
+                        AppointmentStatus::Confirmed->value => 'success',
+                        AppointmentStatus::Cancelled->value => 'danger',
+                        AppointmentStatus::Completed->value => 'success',
+                        AppointmentStatus::RescheduleProposed->value => 'info',
                         default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        AppointmentStatus::Pending->value => 'Pendiente',
+                        AppointmentStatus::Confirmed->value => 'Confirmada',
+                        AppointmentStatus::Cancelled->value => 'Cancelada',
+                        AppointmentStatus::Completed->value => 'Completada',
+                        AppointmentStatus::RescheduleProposed->value => 'Reprogramación propuesta',
+                        AppointmentStatus::Rejected => 'Rechazada',
+                        AppointmentStatus::NoShow => 'No asistió',
+                        default => ucfirst($state),
                     }),
             ])
             ->defaultSort('date_time', 'desc') // Show newest/upcoming first
@@ -69,11 +80,7 @@ class AppointmentsTable
                 // Filter 1: Quick Status check
                 SelectFilter::make('status')
                     ->label('Estatus')
-                    ->options([
-                        'Pendiente' => 'Pendiente',
-                        'Confirmado' => 'Confirmado',
-                        'Cancelado' => 'Cancelado',
-                    ]),
+                    ->options(AppointmentStatus::options()),
 
                 // Filter 2: Show only future appointments
                 Filter::make('future')

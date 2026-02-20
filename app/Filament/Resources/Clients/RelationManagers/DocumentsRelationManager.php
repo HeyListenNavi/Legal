@@ -69,7 +69,7 @@ class DocumentsRelationManager extends RelationManager
                         FileUpload::make('document_path')
                             ->label('Archivo')
                             ->required()
-                            ->disk('local')
+                            ->disk('public')
                             ->directory('client-documents')
                             ->acceptedFileTypes([
                                 'application/pdf',

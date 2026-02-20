@@ -9,6 +9,7 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use App\Enums\AppointmentStatus;
 
 class ListAppointments extends ListRecords
 {
@@ -44,19 +45,18 @@ class ListAppointments extends ListRecords
         return [
             'confirmed' => Tab::make()
                 ->label("Confirmado")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', "Confirmado")),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Confirmed)),
             'pending' => Tab::make()
                 ->label("Pendiente")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', "Pendiente")),
-            'asisted' => Tab::make()
-                ->label("Asistio")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', "Asistio")),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Pending)),
+            'completed' => Tab::make()
+                ->label("Completado")
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Completed)),
             'canceled' => Tab::make()
                 ->label("Cancelado")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', "Cancelado")),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Cancelled)),
             'all' => Tab::make()
                 ->label("Todos"),
         ];
     }
 }
-//Pendiente, Confirmada, Asistió, Canceló, Reagendó

@@ -53,13 +53,10 @@ class EditClients extends EditRecord
                 Action::make('copiarLinkDocumentos')
                     ->label('Copiar link')
                     ->icon('heroicon-o-clipboard')
-                    ->action(function () {
-
-                        $link = URL::temporarySignedRoute(
-                            'cliente.documentos',
-                            now()->addHours(24),
-                            ['client' => $this->record->id]
-                        );
+                    ->action(function ($record) {
+                        $link = route('cliente.documentos', [
+                            'client' => $record->id,
+                        ]);
 
                         $this->js("
                             navigator.clipboard.writeText('{$link}');

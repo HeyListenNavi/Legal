@@ -51,7 +51,7 @@ class ClientProfileController extends Controller
 
         $file = $request->file($field);
 
-        $path = $file->store('client-documents', 'local');
+        $path = $file->store('client-documents', 'public');
 
         ClientDocument::updateOrCreate(
             [
