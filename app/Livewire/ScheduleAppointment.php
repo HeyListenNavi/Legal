@@ -67,7 +67,7 @@ class ScheduleAppointment extends Component
                 'full_name' => $this->full_name,
                 'phone_number' => $this->phone_number,
                 'email' => $this->email,
-                "client_type" => "Prospecto",   
+                "client_type" => "prospecto",   
             ]);
         }
 
