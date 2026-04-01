@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources\Appointments\Tables;
 
+use App\Enums\AppointmentStatus;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Enums\AppointmentStatus;
 
 class AppointmentsTable
 {
@@ -40,13 +42,13 @@ class AppointmentsTable
                 TextColumn::make("modality")
                     ->label("Modalidad")
                     ->badge()
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'Online' => 'heroicon-m-wifi',
                         'Presencial' => 'heroicon-m-building-office',
                         'Llamada' => 'heroicon-m-phone',
                         default => 'heroicon-m-question-mark-circle',
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'Presencial' => 'primary',
                         'Online' => 'info', // Changed to info for blue distinction
                         'Llamada' => 'warning',
@@ -56,7 +58,7 @@ class AppointmentsTable
                 TextColumn::make("status")
                     ->label("Estatus")
                     ->badge()
-                    ->color(fn (string $state) => match ($state) {
+                    ->color(fn(string $state) => match ($state) {
                         AppointmentStatus::Pending->value => 'warning',
                         AppointmentStatus::Confirmed->value => 'success',
                         AppointmentStatus::Cancelled->value => 'danger',
@@ -64,7 +66,7 @@ class AppointmentsTable
                         AppointmentStatus::RescheduleProposed->value => 'info',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
                         AppointmentStatus::Pending->value => 'Pendiente',
                         AppointmentStatus::Confirmed->value => 'Confirmada',
                         AppointmentStatus::Cancelled->value => 'Cancelada',
@@ -75,7 +77,7 @@ class AppointmentsTable
                         default => ucfirst($state),
                     }),
             ])
-            ->defaultSort('date_time', 'desc') // Show newest/upcoming first
+            ->defaultSort('date_time', 'asc') // Show newest/upcoming first
             ->filters([
                 // Filter 1: Quick Status check
                 SelectFilter::make('status')
@@ -85,8 +87,28 @@ class AppointmentsTable
                 // Filter 2: Show only future appointments
                 Filter::make('future')
                     ->label('Próximas Citas')
-                    ->query(fn (Builder $query): Builder => $query->where('date_time', '>=', now()))
+                    ->query(fn(Builder $query): Builder => $query->where('date_time', '>=', now()))
                     ->default(), // UX: Default to showing upcoming appointments
+            ])
+            ->headerActions([
+                Action::make('sendWhatsAppLink')
+                    ->label('Enviar Link WA')
+                    ->icon('heroicon-m-chat-bubble-left-right')
+                    ->color('success')
+                    ->schema([
+                        TextInput::make('phone')
+                            ->label('Número de WhatsApp')
+                            ->required()
+                            ->tel()
+                            ->placeholder('Ej: 5512345678'),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $phone = $data['phone'];
+
+                        $message = "Hola, te envío el link para agendar/revisar tu cita: " . route('appointments.schedule');
+
+                        \App\WhatsApp\WhatsApp::sendText($phone, $message);
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),

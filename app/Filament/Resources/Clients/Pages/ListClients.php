@@ -24,17 +24,20 @@ class ListClients extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make()
-                ->label("Todos"),
+            'clientes' => Tab::make()
+                ->label("Clientes")
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('client_type', "cliente")),
             'fisica' => Tab::make()
                 ->label("Persona Fisica")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('person_type', "persona_fisica")),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('person_type', "persona_fisica")),
             'moral' => Tab::make()
                 ->label("Persona Moral")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('person_type', "persona_moral")),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('person_type', "persona_moral")),
             'prospecto' => Tab::make()
                 ->label("Prospectos")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('client_type', "prospecto")),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('client_type', "prospecto")),
+            'all' => Tab::make()
+                ->label("Todos"),
         ];
     }
 }

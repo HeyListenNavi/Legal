@@ -35,4 +35,16 @@ class EditAppointments extends EditRecord
 
         return $data;
     }
+
+    protected function afterSave(): void
+    {
+        $record = $this->getRecord();
+        $phone = $record->appointmentable->phone_number;
+
+        if ($phone) {
+            $date = $record->date_time->format('d/m/Y H:i');
+            $message = "Tu cita ha sido actualizada. Nueva fecha/hora: {$date}. Si necesitas hacer algún cambio, por favor contáctanos.";
+            \App\WhatsApp\WhatsApp::sendText($phone, $message);
+        }
+    }
 }

@@ -86,7 +86,8 @@ class ProcedureForm
                             ->native(false),
 
                         TextInput::make('order')
-                            ->label('Orden')
+                            ->hidden()
+                            ->default(0)
                             ->numeric(),
                     ]),
 
@@ -137,7 +138,7 @@ class ProcedureForm
                     ])
             ]);
     }
-    
+
     private static function calculateInstallments(Set $set, Get $get): void
     {
         $total = (float) $get('total_cost');

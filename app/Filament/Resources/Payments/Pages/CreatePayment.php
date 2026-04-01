@@ -26,6 +26,15 @@ class CreatePayment extends CreateRecord
             $data['paymentable_id'] = $data['paymentable_id'];
         }
 
+        if ($selector === 'procedure') {
+            if (empty($data['paymentable_id'])) {
+                throw new \Exception('Debes seleccionar un trámite.');
+            }
+
+            $data['paymentable_type'] = \App\Models\Procedure::class;
+            $data['paymentable_id'] = $data['paymentable_id'];
+        }
+
         if ($selector === 'recurrent') {
             if (empty($data['recurrent_payment_id'])) {
                 throw new \Exception('Debes seleccionar un pago recurrente.');

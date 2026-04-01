@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\Payments\Schemas;
 
-use Filament\Schemas\Schema;
+use App\Models\Client;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 
 class PaymentForm
 {
@@ -22,6 +23,7 @@ class PaymentForm
                         Select::make('client_id')
                             ->label('Cliente')
                             ->relationship('client', 'full_name')
+                            ->options(Client::where('client_type', 'cliente')->pluck('full_name', 'id'))
                             ->searchable()
                             ->preload()
                             ->required()
@@ -35,7 +37,7 @@ class PaymentForm
                                 ->prefix('$')
                                 ->required(),
 
-                            Select::make('payment_metod')
+                            Select::make('payment_method')
                                 ->label('Método de Pago')
                                 ->options([
                                     'Efectivo' => 'Efectivo',
@@ -62,6 +64,7 @@ class PaymentForm
                             ->options([
                                 'case' => 'Un Caso',
                                 'recurrent' => 'Pago Recurrente (Iguala)',
+                                'procedure' => 'Un Trámite',
                             ])
                             ->live()
                             ->required()
@@ -78,17 +81,30 @@ class PaymentForm
                                     ->pluck('case_name', 'id')
                                     ->toArray();
                             })
-                            ->visible(fn (Get $get) =>
+                            ->visible(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'case'
-                                && filled($get('client_id'))
+                                    && filled($get('client_id'))
                             )
-                            ->dehydrated(fn (Get $get) =>
+                            ->dehydrated(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'case'
                             )
-                            ->required(fn (Get $get) =>
+                            ->required(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'case'
                             )
                             ->columnSpanFull(),
+
+                        Select::make('paymentable_id')
+                            ->label('Seleccionar Trámite')
+                            ->options(function (Get $get) {
+                                if (!$get('client_id')) return [];
+                                return \App\Models\Procedure::whereHas('clientCase', fn($q) => $q->where('client_id', $get('client_id')))
+                                    ->pluck('title', 'id');
+                            })
+                            ->visible(fn(Get $get) => $get('paymentable_selector') === 'procedure')
+                            ->required(fn(Get $get) => $get('paymentable_selector') === 'procedure'),
 
                         Select::make('recurrent_payment_id')
                             ->label('Seleccionar Pago Recurrente')
@@ -101,14 +117,17 @@ class PaymentForm
                                     ->pluck('title', 'id')
                                     ->toArray();
                             })
-                            ->visible(fn (Get $get) =>
+                            ->visible(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'recurrent'
-                                && filled($get('client_id'))
+                                    && filled($get('client_id'))
                             )
-                            ->dehydrated(fn (Get $get) =>
+                            ->dehydrated(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'recurrent'
                             )
-                            ->required(fn (Get $get) =>
+                            ->required(
+                                fn(Get $get) =>
                                 $get('paymentable_selector') === 'recurrent'
                             )
                             ->columnSpanFull(),

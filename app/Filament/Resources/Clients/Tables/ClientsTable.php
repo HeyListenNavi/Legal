@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\Clients\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Support\Enums\FontWeight; // Necesario para el peso de la fuente
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class ClientsTable
 {
@@ -64,6 +65,15 @@ class ClientsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('shareScheduleLink')
+                    ->label('Pedir Cita WA')
+                    ->icon('heroicon-o-calendar')
+                    ->color('success')
+                    ->action(function ($record) {
+                        $link = route('appointments.schedule') . "?phone=" . $record->phone_number;
+                        $message = "Hola {$record->full_name}, puedes agendar tu próxima cita aquí: {$link}";
+                        \App\WhatsApp\WhatsApp::sendText($record->phone_number, $message);
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

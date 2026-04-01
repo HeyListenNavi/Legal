@@ -2,15 +2,14 @@
 
 namespace App\Filament\Resources\Appointments\Schemas;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use App\Models\Client;
 use Filament\Forms\Components\DateTimePicker;
-
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 
 class AppointmentsForm
 {
@@ -42,7 +41,7 @@ class AppointmentsForm
 
                         Select::make('appointmentable_id')
                             ->label('Cliente')
-                            ->options(\App\Models\Client::pluck('full_name', 'id'))
+                            ->options(Client::where('client_type', 'cliente')->pluck('full_name', 'id'))
                             ->searchable()
                             ->live()
                             ->required()
@@ -102,6 +101,8 @@ class AppointmentsForm
 
                         DateTimePicker::make('date_time')
                             ->label('Fecha y hora')
+                            ->seconds(false)
+                            ->native(false)
                             ->required()
                             ->columnSpanFull(),
 

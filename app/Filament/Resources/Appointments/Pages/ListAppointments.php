@@ -43,18 +43,24 @@ class ListAppointments extends ListRecords
     public function getTabs(): array
     {
         return [
+            'today' => Tab::make()
+                ->label("Hoy")
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereDate('date_time', now())),
+            'tomorrow' => Tab::make()
+                ->label("Mañana")
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereDate('date_time', now()->addDay())),
             'confirmed' => Tab::make()
                 ->label("Confirmado")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Confirmed)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::Confirmed)),
             'pending' => Tab::make()
                 ->label("Pendiente")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Pending)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::Pending)),
             'completed' => Tab::make()
                 ->label("Completado")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Completed)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::Completed)),
             'canceled' => Tab::make()
                 ->label("Cancelado")
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::Cancelled)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::Cancelled)),
             'all' => Tab::make()
                 ->label("Todos"),
         ];
