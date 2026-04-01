@@ -4,10 +4,10 @@ namespace App\Enums;
 
 enum PaymentStatus: string
 {
-    case Paid = 'pagado';
-    case Pending = 'pendiente';
-    case Partial = 'pago_parcial';
-    case Cancelled = 'cancelado';
+    case Paid = 'paid';
+    case Pending = 'pending';
+    case Partial = 'partial';
+    case Cancelled = 'cancelled';
 
     /**
      * Label legible para UI
