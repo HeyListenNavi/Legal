@@ -66,7 +66,6 @@ class CommentsRelationManager extends RelationManager
                         DatePicker::make('solved_date')
                             ->label('Fecha de Resolución')
                             ->native(false)
-                            ->prefixIcon('heroicon-m-calendar-check')
                             ->hidden(fn($get) => $get('status') !== 'Resuelto')
                             ->required(fn($get) => $get('status') === 'Resuelto'),
                     ])->columns(2),
@@ -116,7 +115,7 @@ class CommentsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Nueva Nota')
-                    ->icon('heroicon-m-plus')
+                    ->icon('heroicon-m-plus-circle')
                     ->slideOver()
                     ->modalWidth('md'),
             ])
