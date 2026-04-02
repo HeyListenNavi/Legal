@@ -54,6 +54,7 @@ class ClientCaseForm
                             ->searchable()
                             ->preload()
                             ->required()
+                            ->default(request()->query('client_id'))
                             ->prefixIcon('heroicon-m-user'),
 
                         Select::make('responsable_lawyer')
