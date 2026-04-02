@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute; // Necesario para usar Attributes
+use App\Models\Document;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ClientCase extends Model
 {
@@ -94,5 +96,10 @@ class ClientCase extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, "commentable");
+    }
+
+    public function documents(): MorphMany
+    {
+        return $this->morphMany(Document::class, 'documentable');
     }
 }
