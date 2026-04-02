@@ -48,7 +48,7 @@ class AppointmentsTable
                     })
                     ->color(fn (string $state): string => match ($state) {
                         'Presencial' => 'primary',
-                        'Online' => 'info', // Changed to info for blue distinction
+                        'Online' => 'info',
                         'Llamada' => 'warning',
                         default => 'gray',
                     }),
@@ -59,18 +59,16 @@ class AppointmentsTable
                     ->color(fn (AppointmentStatus $state) => $state->color())
                     ->formatStateUsing(fn (AppointmentStatus $state): string => $state->label()),
             ])
-            ->defaultSort('date_time', 'desc') // Show newest/upcoming first
+            ->defaultSort('date_time', 'asc')
             ->filters([
-                // Filter 1: Quick Status check
                 SelectFilter::make('status')
                     ->label('Estatus')
                     ->options(AppointmentStatus::options()),
 
-                // Filter 2: Show only future appointments
                 Filter::make('future')
                     ->label('Próximas Citas')
                     ->query(fn (Builder $query): Builder => $query->where('date_time', '>=', now()))
-                    ->default(), // UX: Default to showing upcoming appointments
+                    ->default(),
             ])
             ->recordActions([
                 ViewAction::make(),

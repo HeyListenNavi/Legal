@@ -26,7 +26,7 @@ class ListAppointments extends ListRecords
                 ->color('primary')
                 ->action(function () {
 
-                    $link = route('appointments.schedule'); // tu nombre de ruta
+                    $link = route('appointments.schedule');
 
                     $this->js("
                         navigator.clipboard.writeText('{$link}');
