@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute; // Necesario para usar Attributes
 use App\Models\Document;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Enums\PaymentStatus;
 
 class ClientCase extends Model
 {
@@ -26,27 +27,33 @@ class ClientCase extends Model
         "real_finished_date",
         "status",
         "total_pricing",
+        "billing_mode",
     ];
 
     protected function paidPorcentage(): Attribute
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                // Si el caso no tiene precio total definido o es cero, retorna 0
-                $totalPricing = (float) $attributes['total_pricing'];
-                if ($totalPricing <= 0) {
-                    return 0;
+                $totalPricing = 0;
+                $totalPaid = 0;
+
+                if (($attributes['billing_mode'] ?? 'by_case') === 'by_case') {
+                    // MODO 1: COBRO GLOBAL POR CASO
+                    $totalPricing = (float) $attributes['total_pricing'];
+                    // Sumamos SOLO los pagos con estatus PAID
+                    $totalPaid = (float) $this->payments()->where('payment_status', PaymentStatus::Paid)->sum('amount');
+                } else {
+                    // MODO 2: COBRO POR TRÁMITES (Sumamos la info de todos sus trámites)
+                    foreach ($this->procedures as $procedure) {
+                        // El costo total del trámite es la suma de TODOS sus pagos (pendientes + pagados)
+                        $totalPricing += (float) $procedure->payments()->sum('amount');
+                        // Lo pagado es solo lo que tiene estatus PAID
+                        $totalPaid += (float) $procedure->payments()->where('payment_status', PaymentStatus::Paid)->sum('amount');
+                    }
                 }
 
-                // Carga la relación de pagos (si aún no está cargada)
-                // y suma la cantidad pagada ('amount' en la tabla 'payments').
-                $totalPaid = (float) $this->payments()->sum('amount');
-
-                // Calcula el porcentaje pagado
-                $percentage = ($totalPaid / $totalPricing) * 100;
-
-                // Retorna el porcentaje redondeado a dos decimales
-                return round($percentage, 2);
+                if ($totalPricing <= 0) return 0;
+                return round(($totalPaid / $totalPricing) * 100, 2);
             },
         );
     }
@@ -55,16 +62,20 @@ class ClientCase extends Model
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                $totalPricing = (float) $attributes['total_pricing'];
+                $totalPricing = 0;
+                $totalPaid = 0;
 
-                // Sumamos lo pagado
-                $totalPaid = (float) $this->payments()->sum('amount');
+                if (($attributes['billing_mode'] ?? 'by_case') === 'by_case') {
+                    $totalPricing = (float) $attributes['total_pricing'];
+                    $totalPaid = (float) $this->payments()->where('payment_status', PaymentStatus::Paid)->sum('amount');
+                } else {
+                    foreach ($this->procedures as $procedure) {
+                        $totalPricing += (float) $procedure->payments()->sum('amount');
+                        $totalPaid += (float) $procedure->payments()->where('payment_status', PaymentStatus::Paid)->sum('amount');
+                    }
+                }
 
-                // Calculamos la deuda
-                $owed = $totalPricing - $totalPaid;
-
-                // Usamos max(0, ...) por si el cliente pagó de más, para que no salga deuda negativa
-                return max(0, $owed);
+                return max(0, $totalPricing - $totalPaid);
             },
         );
     }

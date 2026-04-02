@@ -20,7 +20,7 @@ class DocumentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'documents';
 
-    protected static ?string $title = 'Expediente Digital del Trámite';
+    protected static ?string $title = "Documentos del Tramite";
 
     public function form(Schema $schema): Schema
     {
