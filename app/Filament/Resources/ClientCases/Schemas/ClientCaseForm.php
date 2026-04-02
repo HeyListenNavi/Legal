@@ -69,20 +69,30 @@ class ClientCaseForm
                     ->icon('heroicon-m-scale')
                     ->columnSpan(4)
                     ->schema([
+                        // NIVEL 1: Categoría Principal (Migratorio / Criminal)
                         Select::make('case_type')
-                            ->label('Materia')
+                            ->label('Materia Principal')
                             ->options([
+                                'Migratorio' => 'Migratorio',
                                 'Criminal' => 'Criminal',
-                                'Mercantil' => 'Mercantil',
-                                'Laboral' => 'Laboral',
-                                'Penal' => 'Penal',
-                                'Familiar' => 'Familiar',
-                                'Administrativo' => 'Administrativo',
                             ])
-                            ->live()
                             ->native(false)
                             ->required()
                             ->prefixIcon('heroicon-m-tag'),
+
+                        // NIVEL 2: Sub-categoría estática
+                        Select::make('case_sub_type')
+                            ->label('Trámite Específico')
+                            ->options([
+                                'Perdón' => 'Perdón',
+                                'Petición' => 'Petición',
+                                'Record' => 'Record',
+                                'Visa' => 'Visa',
+                                'Ciudadanía' => 'Ciudadanía',
+                            ])
+                            ->native(false)
+                            ->required()
+                            ->prefixIcon('heroicon-m-queue-list'),
 
                         Select::make('status')
                             ->label('Estatus del Caso')
@@ -122,7 +132,7 @@ class ClientCaseForm
                             ->columnSpanFull(),
 
                         Grid::make(2)->schema([
-                            // LADO IZQUIERDO: Campos financieros (Solo visibles si es "por caso")
+                            // LADO IZQUIERDO: Campos financieros
                             Grid::make(1)
                                 ->columnSpan(1)
                                 ->visible(fn (Get $get) => $get('billing_mode') === 'by_case')
@@ -137,7 +147,6 @@ class ClientCaseForm
                                         ->afterStateUpdated(fn (Set $set, Get $get) => self::calculateInstallments($set, $get))
                                         ->prefixIcon('heroicon-m-banknotes'),
 
-                                    // Campos efímeros para planificar pagos (solo se usan en Create)
                                     TextInput::make('initial_cost')
                                         ->label('Anticipo / Inicial')
                                         ->numeric()
@@ -180,7 +189,6 @@ class ClientCaseForm
                                         ->native(false)
                                         ->prefixIcon('heroicon-m-calendar-days'),
 
-                                    // Mostramos el estado financiero real solo en vista/edición
                                     TextEntry::make('financial_status')
                                         ->label('Balance Actual')
                                         ->state(fn($record) => $record
@@ -190,7 +198,7 @@ class ClientCaseForm
                                         ->hiddenOn('create'),
                                 ]),
 
-                            // LADO DERECHO: Fechas (siempre visibles)
+                            // LADO DERECHO: Fechas
                             Grid::make(1)->columnSpan(1)->schema([
                                 DatePicker::make('start_date')
                                     ->label('Fecha de Inicio')

@@ -19,6 +19,7 @@ class ClientCase extends Model
         "case_name",
         "responsable_lawyer",
         "case_type",
+        "case_sub_type",
         //"courtroom",
         "external_expedient_number",
         "resume",
