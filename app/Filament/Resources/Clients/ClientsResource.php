@@ -61,7 +61,7 @@ class ClientsResource extends Resource
             DocumentsRelationManager::class,
             AppointmentsRelationManager::class,
             ClientPaymentsRelationManager::class,
-            RecurrentPaymentsRelationManager::class,
+            // RecurrentPaymentsRelationManager::class,
         ];
     }
 
