@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("client_id")->index();
             $table->string("case_name")->index();
-            $table->string("responsable_lawyer");
+            $table->foreignId("responsable_lawyer")->nullable()->constrained("users")->nullOnDelete();
             $table->string("case_type")->index();
             $table->string("case_sub_type")->nullable()->index();
             $table->string('billing_mode')->default('by_case');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->DateTime("start_date");
             $table->DateTime("stimated_finish_date");
             $table->DateTime("real_finished_date")->nullable();
-            $table->string("status")->index(); 
+            $table->string("status")->index();
             $table->string("total_pricing")->default(0);
             $table->timestamps();
 
