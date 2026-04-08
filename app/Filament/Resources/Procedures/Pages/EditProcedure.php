@@ -18,6 +18,12 @@ class EditProcedure extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('imprimir')
+                ->label('Imprimir PDF')
+                ->icon('heroicon-o-printer')
+                ->color('gray')
+                ->url(fn() => route('tramite.imprimir', $this->record))
+                ->openUrlInNewTab(),
 
             ActionGroup::make([
                 Action::make('mandarLinkDocumentos')
