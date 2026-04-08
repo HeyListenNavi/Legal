@@ -30,6 +30,9 @@ Route::get('/cliente/{client}/documentos', [ClientDocumentRequestController::cla
 Route::get('/cliente/{client}/imprimir', [ClientProfileController::class, 'downloadPdf'])
     ->name('cliente.imprimir');
 
+Route::get('/caso/{clientCase}/imprimir', [\App\Http\Controllers\CaseController::class, 'downloadPdf'])
+    ->name('caso.imprimir');
+
 Route::post('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'store'])
     ->name('cliente.documentos.store');
 
