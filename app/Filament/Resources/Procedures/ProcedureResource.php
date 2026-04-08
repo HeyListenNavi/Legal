@@ -61,7 +61,6 @@ class ProcedureResource extends Resource
         return [
             'index' => ListProcedures::route('/'),
             'create' => CreateProcedure::route('/create'),
-            'view' => ViewProcedure::route('/{record}'),
             'edit' => EditProcedure::route('/{record}/edit'),
         ];
     }

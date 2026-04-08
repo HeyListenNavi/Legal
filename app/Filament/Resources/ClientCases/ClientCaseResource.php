@@ -71,7 +71,6 @@ class ClientCaseResource extends Resource
         return [
             'index' => ListClientCases::route('/'),
             'create' => CreateClientCase::route('/create'),
-            //'view' => ViewClientCase::route('/{record}'),
             'edit' => EditClientCase::route('/{record}/edit'),
         ];
     }
