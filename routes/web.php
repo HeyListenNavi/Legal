@@ -27,6 +27,9 @@ Route::post('/cliente/{client}/editar-perfil', [ClientProfileController::class, 
 Route::get('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'create'])
     ->name('cliente.documentos');
 
+Route::get('/cliente/{client}/imprimir', [ClientProfileController::class, 'downloadPdf'])
+    ->name('cliente.imprimir');
+
 Route::post('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'store'])
     ->name('cliente.documentos.store');
 
