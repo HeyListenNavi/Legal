@@ -6,6 +6,7 @@ use App\Filament\Resources\Procedures\RelationManagers\PaymentsRelationManager;
 use App\Filament\Resources\Procedures\Pages\CreateProcedure;
 use App\Filament\Resources\Procedures\Pages\EditProcedure;
 use App\Filament\Resources\Procedures\Pages\ListProcedures;
+use App\Filament\Resources\Procedures\Pages\ViewProcedure;
 use App\Filament\Resources\Procedures\Schemas\ProcedureForm;
 use App\Filament\Resources\Procedures\Tables\ProceduresTable;
 use App\Models\Procedure;
@@ -60,6 +61,7 @@ class ProcedureResource extends Resource
         return [
             'index' => ListProcedures::route('/'),
             'create' => CreateProcedure::route('/create'),
+            'view' => ViewProcedure::route('/{record}'),
             'edit' => EditProcedure::route('/{record}/edit'),
         ];
     }

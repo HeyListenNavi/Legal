@@ -70,7 +70,7 @@ class ClientsResource extends Resource
         return [
             'index' => ListClients::route('/'),
             'create' => CreateClients::route('/create'),
-            //'view' => ViewClients::route('/{record}'),
+            'view' => ViewClients::route('/{record}'),
             'edit' => EditClients::route('/{record}/edit'),
         ];
     }

@@ -18,6 +18,13 @@ class EditClients extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('imprimir')
+                ->label('Imprimir PDF')
+                ->icon('heroicon-o-printer')
+                ->color('gray')
+                ->url(fn() => route('cliente.imprimir', $this->record))
+                ->openUrlInNewTab(),
+
             Action::make('convertirACliente')
                 ->label('Confirmar como Cliente')
                 ->icon('heroicon-m-user-plus')

@@ -27,6 +27,15 @@ Route::post('/cliente/{client}/editar-perfil', [ClientProfileController::class, 
 Route::get('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'create'])
     ->name('cliente.documentos');
 
+Route::get('/cliente/{client}/imprimir', [ClientProfileController::class, 'downloadPdf'])
+    ->name('cliente.imprimir');
+
+Route::get('/caso/{clientCase}/imprimir', [\App\Http\Controllers\CaseController::class, 'downloadPdf'])
+    ->name('caso.imprimir');
+
+Route::get('/tramite/{procedure}/imprimir', [\App\Http\Controllers\ProcedureController::class, 'downloadPdf'])
+    ->name('tramite.imprimir');
+
 Route::post('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'store'])
     ->name('cliente.documentos.store');
 
