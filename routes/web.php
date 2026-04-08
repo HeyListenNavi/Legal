@@ -33,6 +33,9 @@ Route::get('/cliente/{client}/imprimir', [ClientProfileController::class, 'downl
 Route::get('/caso/{clientCase}/imprimir', [\App\Http\Controllers\CaseController::class, 'downloadPdf'])
     ->name('caso.imprimir');
 
+Route::get('/tramite/{procedure}/imprimir', [\App\Http\Controllers\ProcedureController::class, 'downloadPdf'])
+    ->name('tramite.imprimir');
+
 Route::post('/cliente/{client}/documentos', [ClientDocumentRequestController::class, 'store'])
     ->name('cliente.documentos.store');
 
