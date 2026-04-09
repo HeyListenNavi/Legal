@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\CheckboxList;
 
 class RoleForm
 {
@@ -22,18 +23,29 @@ class RoleForm
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
-                            ->placeholder('Ej. Gerente, Abogado Sr, Secretaria...')
-                            ->prefixIcon('heroicon-m-shield-check')
+                            ->placeholder('Ej. Admin, Visitador, Conexion...')
+                            ->prefixIcon('heroicon-m-key')
                             ->columnSpanFull(),
 
-                        Select::make('permissions')
-                            ->label('Permisos Asignados')
-                            ->multiple()
-                            ->relationship('permissions', 'name')
-                            ->preload()
-                            ->searchable()
-                            ->columnSpanFull()
-                            ->helperText('Seleccione las acciones que este rol puede realizar en el sistema.'),
+                        Section::make('Privilegios de Acceso')
+                            ->description('Seleccione qué acciones puede realizar este rol.')
+                            ->columnSpan(2)
+                            ->schema([
+                                CheckboxList::make('permissions')
+                                    ->label('Permisos')
+                                    ->relationship('permissions', 'name')
+                                    ->searchable()
+                                    ->bulkToggleable()
+                                    ->columns(2)
+                                    ->gridDirection('row')
+                                    ->getOptionLabelFromRecordUsing(
+                                        fn($record) =>
+                                        str($record->name)
+                                            ->replace('.', ': ')
+                                            ->replace('_', ' ')
+                                            ->title()
+                                    )
+                            ]),
                     ]),
             ]);
     }
