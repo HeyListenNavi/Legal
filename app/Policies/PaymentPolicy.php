@@ -34,4 +34,9 @@ class PaymentPolicy
     {
         return $user->can('payment.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('payment.delete');
+    }
 }

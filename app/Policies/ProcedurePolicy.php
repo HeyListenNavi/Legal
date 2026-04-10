@@ -34,4 +34,9 @@ class ProcedurePolicy
     {
         return $user->can('procedure.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('procedure.delete');
+    }
 }

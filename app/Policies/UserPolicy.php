@@ -33,4 +33,9 @@ class UserPolicy
     {
         return $user->can('user.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('user.delete');
+    }
 }

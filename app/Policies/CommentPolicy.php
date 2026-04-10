@@ -34,4 +34,9 @@ class CommentPolicy
     {
         return $user->can('comment.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('comment.delete');
+    }
 }

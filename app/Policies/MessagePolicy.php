@@ -34,4 +34,10 @@ class MessagePolicy
     {
         return $user->can('message.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('message.delete');
+    }
+
 }

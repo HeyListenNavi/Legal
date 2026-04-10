@@ -34,4 +34,9 @@ class ClientPolicy
     {
         return $user->can('client.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('client.delete');
+    }
 }
