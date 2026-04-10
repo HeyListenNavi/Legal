@@ -34,4 +34,9 @@ class RolePolicy
     {
         return $user->can('role.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('role.delete');
+    }
 }

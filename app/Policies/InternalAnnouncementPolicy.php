@@ -34,4 +34,9 @@ class InternalAnnouncementPolicy
     {
         return $user->can('internal_announcement.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('internal_announcement.delete');
+    }
 }
