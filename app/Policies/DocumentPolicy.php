@@ -34,4 +34,9 @@ class DocumentPolicy
     {
         return $user->can('document.delete');
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('document.delete');
+    }
 }
